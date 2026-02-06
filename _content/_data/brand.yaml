@@ -41,31 +41,12 @@ typeScales:
     minTypeScale: 1.2
     maxTypeScale: 1.25
 colors:
-  - name: light-green
-    value: '#22e90c'
-  - name: dark-blue
-    value: '#113f88'
-palettes:
-  - name: main
-    text: light-green
-    bg: dark-blue
-    accent: ''
-    border: ''
-    text-decoration: ''
-    text--marker: ''
-    advancedDefaults: null
-    selection: null
-    strong: null
-    em: null
-    mark: null
-    b: null
-    heading: null
-    a: null
-    button: null
-    code: null
-    svg: null
-    scrollbar: null
-    advanced: null
+  - name: black
+    value: '#000000'
+  - name: white
+    value: '#ffffff'
+  - name: dark-yellow
+    value: '#d4af37'
 styleContexts:
   - name: main
     value: ctx
