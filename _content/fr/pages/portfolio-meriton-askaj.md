@@ -10,4 +10,4 @@ eleventyNavigation:
 ---
 ### `Portfolio - Meriton Askaj`
 
-En Alternance à l’EFP dans le cadre de ma formation en développement web, je souhaite mettre mes compétences en HTML, CSS, JavaScript, PHP, Bootstrap, GitHub, Laravel et MySQL au service de projets réels afin de progresser. Curieux et motiver, je suis ouvert à l’apprentissage et à l’utilisation d’autres langages et technologies selon les besoins de votre entreprise et projets.
+En Alternance à l’EFP dans le cadre de ma formation en développement web, je souhaite mettre mes compétences en HTML, CSS, JavaScript, PHP, Bootstrap, GitHub, Laravel et MySQL au service de projets réels afin de progresser. Curieux et motiver, je suis ouvert à l’apprentissage et à l’utilisation d’autres langages et technologies selon les besoins de votre entreprise et projets..
