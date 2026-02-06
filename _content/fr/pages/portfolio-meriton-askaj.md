@@ -10,4 +10,6 @@ eleventyNavigation:
 ---
 # Meriton Askaj _&#32;Développeur web_ - Stagiaire
 
-{% section type="grid-fluid", vars={"columns":1,"gap":"2em","class":""}, blocks=[{"value":"**Email:** meritonaskaj01@gmail.com **Tel:** (+32) 0487725435  **Adresse:** Groenveld, Zaventem","type":"markdown"}], advanced={} %}
+{% section type="grid-fluid", vars={"columns":1,"gap":"2em","class":""}, blocks=[{"value":"**Email:** [meritonaskaj01@gmail.com](meritonaskaj01@gmail.com) **Tel:** (+32) 0487725435  **Adresse:** Groenveld, Zaventem","type":"markdown"},{"value":"**GitHub:** [Meriton-AKJ](https://github.com/Meriton-AKJ)  **LinkedIn:** [Meriton Askaj](www.linkedin.com/in/meriton-askaj-994700311)  **Portfolio:** [Meriton Askaj](https://meriton-akj.github.io/Portfolio---Meriton-Askaj/)","type":"markdown"}], advanced={} %}
+
+#### Profil professionnel
