@@ -13,6 +13,16 @@ fontStacksContexts:
       native: system-ui
     code:
       native: monospace-code
+  - name: main
+    body:
+      native: humanist
+      custom: Quicksand
+    heading:
+      native: system-ui
+      custom: ''
+    code:
+      native: monospace-code
+      custom: ''
 customFontsImport:
   - name: Quicksand
     source:
