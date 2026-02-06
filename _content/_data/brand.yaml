@@ -47,6 +47,27 @@ colors:
     value: '#ffffff'
   - name: dark-yellow
     value: '#d4af37'
+palettes:
+  - name: main
+    text: black
+    bg: white
+    accent: dark-yellow
+    border: dark-yellow
+    text-decoration: dark-yellow
+    text--marker: dark-yellow
+    advancedDefaults: null
+    selection: null
+    strong: null
+    em: null
+    mark: null
+    b: null
+    heading: null
+    a: null
+    button: null
+    code: null
+    svg: null
+    scrollbar: null
+    advanced: null
 styleContexts:
   - name: main
     value: ctx
