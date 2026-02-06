@@ -68,6 +68,26 @@ palettes:
     svg: null
     scrollbar: null
     advanced: null
+  - name: secondaire
+    text: black
+    bg: dark-yellow
+    accent: white
+    border: white
+    text-decoration: white
+    text--marker: white
+    advancedDefaults: null
+    selection: null
+    strong: null
+    em: null
+    mark: null
+    b: null
+    heading: null
+    a: null
+    button: null
+    code: null
+    svg: null
+    scrollbar: null
+    advanced: null
 styleContexts:
   - name: main
     value: ctx
