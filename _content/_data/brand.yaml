@@ -40,6 +40,11 @@ typeScales:
     maxFontSize: 20
     minTypeScale: 1.2
     maxTypeScale: 1.25
+colors:
+  - name: light-green
+    value: '#22e90c'
+  - name: dark-blue
+    value: '#113f88'
 styleContexts:
   - name: main
     value: ctx
