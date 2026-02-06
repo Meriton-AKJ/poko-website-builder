@@ -7,6 +7,7 @@ localizationKey: 1ac6f2b69390
 name: CV - Meriton Askaj
 eleventyNavigation:
   order: 2
+vars: {}
 ---
 # Meriton Askaj __ 
 
@@ -20,7 +21,41 @@ En Alternance à l’EFP dans le cadre de ma formation en développement web, je
 
 #### Compétences techniques
 
-{% section type="grid-fluid", vars={"columns":3,"gap":"2em","class":""}, blocks=[{"value":"**Développement front-end**\n\n- HTML5\n- CSS3\n- JavaScript et manipulation du DOM\n- Bootstrap 5","type":"markdown"},{"value":"**Développement back end**\n\n- PHP\n- Laravel\n- MySQL","type":"markdown"},{"value":"**Outils et logiciels**\n\n- VS Code\n- GitHub\n- Figma\n- Docker","type":"markdown"}], advanced={} %}
+:::: grid-fluid
+
+::: div 
+
+**Développement front-end** 
+
+- HTML5 
+- CSS3 
+- JavaScript et manipulation du DOM 
+- Bootstrap 5
+
+:::
+
+::: div 
+
+**Développement back end**
+
+- PHP
+- Laravel
+- MySQL 
+
+:::
+
+::: div 
+
+**Outils et logiciels** 
+
+- VS Code
+- GitHub
+- Figma
+- Docker
+
+:::
+
+::::
 
 #### **Education et formation**
 
