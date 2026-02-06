@@ -1,0 +1,9 @@
+siteName: Portfolio - Meriton Askaj
+productionUrl: https://poko-website-builder-79u.pages.dev/
+languages:
+  - code: fr
+    name: Français
+    customUrlPrefix: null
+    status: published
+    isCmsDefault: false
+    isWebsiteDefault: false
