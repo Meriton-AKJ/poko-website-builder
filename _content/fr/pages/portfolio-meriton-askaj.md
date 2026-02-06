@@ -7,6 +7,7 @@ localizationKey: 1ac6f2b69390
 name: CV - Meriton Askaj
 eleventyNavigation:
   order: 2
+vars: {}
 ---
 # Meriton Askaj __ 
 
@@ -28,4 +29,4 @@ En Alternance à l’EFP dans le cadre de ma formation en développement web, je
 
 #### **Langues**
 
-{% section type="grid-fluid", vars={"columns":1,"gap":"2em","class":""}, blocks=[{"value":"**Français:** Bilingue   **&#32;Anglais:** Niveau C1\n","type":"markdown"},{"value":"**Albanais:** Bilingue**&#32;&#32;&#32;&#32;Néerlandais:** Niveau B1","type":"markdown"}], advanced={} %}
+{% section type="grid-fluid", vars={"columns":1,"gap":"2em","class":""}, blocks=[{"value":"**Français:** Bilingue   **&#32;Anglais:** Niveau C1","type":"markdown"},{"value":"**Albanais:** Bilingue**&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Néerlandais:** Niveau B1","type":"markdown"}], advanced={} %}
