@@ -8,6 +8,6 @@ name: CV - Meriton Askaj
 eleventyNavigation:
   order: 2
 ---
-# Meriton Askaj -_&#32;Développeur web_ - Stagiaire
+# Meriton Askaj _&#32;Développeur web_ - Stagiaire
 
-{% section type="grid-fluid", vars={"columns":1,"gap":"2em","class":""}, blocks=[{"value":"**Email:** meritonaskaj01@gmail.com**** \n\n**Tel:** (+32) 0487725435  \n\n**Adresse:** Groenveld, Zaventem","type":"markdown"}], advanced=null %}
+{% section type="grid-fluid", vars={"columns":1,"gap":"2em","class":""}, blocks=[{"value":"**Email:** meritonaskaj01@gmail.com **Tel:** (+32) 0487725435  **Adresse:** Groenveld, Zaventem","type":"markdown"}], advanced={} %}
