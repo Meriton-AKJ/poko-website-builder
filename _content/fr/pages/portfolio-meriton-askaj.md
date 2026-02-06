@@ -22,4 +22,4 @@ En Alternance à l’EFP dans le cadre de ma formation en développement web, je
 
 `<hr>`
 
-{% section type="fixed-fluid", vars={"widthFixed":"","widthFluidMin":"","fixedRight":false,"gap":"2em","class":""}, blocks=[{"value":"**Développement front-end**\n\n- HTML5\n- CSS3\n- JavaScript et manipulation du DOM\n- Bootstrap 5","type":"markdown"},{"value":"**Développement back end**\n\n- PHP\n- Laravel\n- MySQL","type":"markdown"}], advanced={} %}
+{% section type="fixed-fluid", vars={"widthFixed":"","widthFluidMin":"","fixedRight":false,"gap":"2em","class":""}, blocks=[{"value":"**Développement front-end**\n\n- HTML5\n- CSS3\n- JavaScript et manipulation du DOM\n- Bootstrap 5","type":"markdown"},{"value":"**Développement back end**\n\n- PHP\n- Laravel\n- MySQL","type":"markdown"},{"value":"**Outils et logiciels**\n\n- VS Code\n- GitHub\n- Figma\n- Docker","type":"markdown"}], advanced={} %}
