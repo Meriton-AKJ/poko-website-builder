@@ -9,4 +9,6 @@ eleventyNavigation:
   order: 2
 vars: {}
 ---
-{% section type="custom", vars={}, blocks=[{"value":"# Merion Askaj","type":"markdown"},{"value":"Développeur web - **Stagiaire** ","type":"markdown"}], advanced=null %}
+{% section type="custom", vars={}, blocks=[{"value":"# Merion Askaj","type":"markdown"},{"value":"Développeur web - **Stagiaire** ","type":"markdown"}], advanced={} %}
+
+{% section type="switcher", vars={"widthWrap":"","gap":"1em","class":""}, blocks=[{"value":"**Email:** [meritonaskaj01@gmail.com](meritonaskaj01@gmail.com)\n\n**Tel:** (+32) 0487725435\n\n**Adresse:** Groenveld, Zaventem","type":"markdown"}], advanced=null %}
