@@ -7,11 +7,8 @@ localizationKey: 1ac6f2b69390
 name: CV - Meriton Askaj
 eleventyNavigation:
   order: 2
-vars: {}
 ---
-# Meriton Askaj 
-
-# _Développeur web_ - Stagiaire { .palette-secondaire }
+# Meriton Askaj - _Développeur web_ - Stagiaire { .palette-secondaire }
 
 {% section type="grid-fluid", vars={"columns":1,"gap":"2em","class":""}, blocks=[{"value":"**Email:** [meritonaskaj01@gmail.com](meritonaskaj01@gmail.com) **Tel:** (+32) 0487725435  **Adresse:** Groenveld, Zaventem","type":"markdown"},{"value":"**GitHub:** [Meriton-AKJ](https://github.com/Meriton-AKJ)  **LinkedIn:** [Meriton Askaj](www.linkedin.com/in/meriton-askaj-994700311)  **Portfolio:** [Meriton Askaj](https://meriton-akj.github.io/Portfolio---Meriton-Askaj/)","type":"markdown"}], advanced={} %}
 
