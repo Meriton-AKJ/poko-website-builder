@@ -26,4 +26,8 @@ En Alternance à l’EFP dans le cadre de ma formation en développement web, je
 
 **Education et formation**
 
-{% section type="grid-fluid", vars={"columns":1,"gap":"2em","class":""}, blocks=[{"value":"**EFP, Uccle: Formation en Alternance - Développeur web Front-end**\n\n30/09/2024 - En cours Apprentissage des technologies web modernes: HTML5, CSS3, Javascript, PHP, Laravel , MySQL, Bootstrap, Docker","type":"markdown"}], advanced={} %}
+{% section type="grid-fluid", vars={"columns":1,"gap":"2em","class":""}, blocks=[{"value":"**EFP, Uccle: Formation en Alternance - Développeur web Front-end**\n\n30/09/2024 - En cours Apprentissage des technologies web modernes: HTML5, CSS3, Javascript, PHP, Laravel , MySQL, Bootstrap, Docker","type":"markdown"},{"value":"**Lycée Emile Max, Schaerbeek: Diplôme secondaire générale - CESS Math-sciences**\n\n2019-2021 Certificat d'Enseignement Secondaire Supérieur avec orientation mathématiques sciences.","type":"markdown"}], advanced={} %}
+
+**Langues**
+
+{% section type="grid-fluid", vars={"columns":1,"gap":"2em","class":""}, blocks=[{"value":"**Français:** Bilingue   **&#32;Anglais:** Niveau C1\n","type":"markdown"},{"value":"**Albanais:** Bilingue**&#32;&#32;&#32;&#32;Néerlandais:** Niveau B1","type":"markdown"}], advanced=null %}
