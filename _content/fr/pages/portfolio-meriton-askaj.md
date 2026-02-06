@@ -11,3 +11,5 @@ eleventyNavigation:
 ## Contactez-moi
 
 Les différents moyens de me contacter
+
+{% section type="fixed-fluid", vars={"widthFixed":"","widthFluidMin":"","fixedRight":false,"gap":"","class":""}, blocks=[{"alt":"marguerite","title":"Marguerite","width":100,"aspectRatio":null,"loading":"","rawAttrs":"","type":"image","src":"/_images/une-marguerite.webp"}], advanced=null %}
