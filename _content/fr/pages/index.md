@@ -7,5 +7,8 @@ localizationKey: af94e5938c9c
 name: Index
 eleventyNavigation:
   order: 1
+vars: {}
 ---
 C'est la page index
+
+{% partial "btn-devisgratuit.md" %}
