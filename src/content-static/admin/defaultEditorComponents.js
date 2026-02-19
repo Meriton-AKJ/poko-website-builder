@@ -125,6 +125,128 @@ const extractQuotedString = (argumentsString, propName) => {
   return null;
 };
 
+/**
+ * Extracts specified attributes from a string (quoted or unquoted)
+ * Works with both Nunjucks (comma-separated) and HTML (space-separated) attributes
+ * @param {string} attributesString - The string containing attributes
+ * @param {string[]} propNames - Array of attribute names to extract
+ * @returns {{ extracted: Object<string, string|boolean|number|null>, remaining: string }}
+ */
+const extractAttributes = (attributesString, propNames) => {
+  const extracted = {};
+  let remaining = attributesString;
+
+  for (const propName of propNames) {
+    // Pattern handles:
+    // - Double quoted: attr="value" (with escape support)
+    // - Single quoted: attr='value' (with escape support)
+    // - Unquoted: attr=value (ends at comma, space, or end)
+    const pattern = new RegExp(
+      `(^|[,\\s])\\s*(${propName}\\s*=\\s*(?:` +
+        `"(?:[^"\\\\]|\\\\.)*"|` + // double quoted
+        `'(?:[^'\\\\]|\\\\.)*'|` + // single quoted
+        `[^,\\s"']+` + // unquoted (no spaces, commas, or quotes)
+        `))\\s*([,\\s]|$)`,
+    );
+
+    const match = remaining?.match(pattern);
+    if (match) {
+      // Extract value - handle all three formats
+      const attrPart = match[2];
+      const eqIndex = attrPart.indexOf("=");
+      let value = attrPart.slice(eqIndex + 1).trim();
+
+      // Remove surrounding quotes and unescape if quoted
+      const isQuoted =
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"));
+
+      if (isQuoted) {
+        const quote = value[0];
+        value = value
+          .slice(1, -1)
+          .replace(new RegExp(`\\\\${quote}`, "g"), quote);
+      } else {
+        // Coerce unquoted values to native types
+        if (value === "true") value = true;
+        else if (value === "false") value = false;
+        else if (value === "null") value = null;
+        else if (value === "undefined") value = undefined;
+        else if (!isNaN(value) && value !== "") value = Number(value);
+      }
+      extracted[propName] = value;
+
+      // Remove the attribute, preserving one separator if between other attrs
+      const leadingSep = match[1];
+      const trailingSep = match[3];
+      let replacement = "";
+      if (
+        leadingSep &&
+        trailingSep &&
+        !/^$/.test(leadingSep) &&
+        !/^$/.test(trailingSep)
+      ) {
+        replacement = leadingSep === "," || trailingSep === "," ? ", " : " ";
+      }
+      remaining = remaining.replace(match[0], replacement);
+    } else {
+      extracted[propName] = null;
+    }
+  }
+
+  // Clean up separators and whitespace
+  remaining = remaining
+    ?.replace(/^[,\s]+|[,\s]+$/g, "")
+    .replace(/\s*,\s*,\s*/g, ", ")
+    .trim();
+
+  return { extracted, remaining };
+};
+
+/**
+ * Extracts attributes and content from a paired Nunjucks tag
+ * @param {string} contentString - The string to search in
+ * @param {string} tagName - The tag name (e.g., 'sectionHeader', 'gridItem')
+ * @returns {{ attributes: string|null, content: string } | null}
+ */
+const extractWithNunjucksTag = (contentString, tagName) => {
+  if (!contentString) return null;
+
+  // Matches: {% tagName [attributes] %} content {% endtagName %}
+  const regex = new RegExp(
+    `{%\\s*${tagName}(?:\\s+([^%]*?))?\\s*%}\\s*([\\s\\S]*?)\\s*{%\\s*end${tagName}\\s*%}`,
+    "ms",
+  );
+
+  const match = contentString.match(regex);
+  if (!match) return null;
+
+  return {
+    attributes: match[1]?.trim() || null, // null if no attributes
+    content: match[2].trim(),
+  };
+};
+
+// Variant for extracting ALL occurrences
+const extractAllWithNunjucksTag = (contentString, tagName) => {
+  if (!contentString) return [];
+
+  const regex = new RegExp(
+    `{%\\s*${tagName}(?:\\s+([^%]*?))?\\s*%}\\s*([\\s\\S]*?)\\s*{%\\s*end${tagName}\\s*%}`,
+    "gms",
+  );
+
+  const results = [];
+  let match;
+  while ((match = regex.exec(contentString)) !== null) {
+    results.push({
+      attributes: match[1]?.trim() || null,
+      content: match[2].trim(),
+    });
+  }
+  return results;
+};
+
 const parsePartialSyntax = (match) => {
   // Parse the arguments from the captured string
   const partialSlug = match[1];
@@ -240,7 +362,6 @@ export const imageShortcode = {
   id: "imageShortcode",
   label: "Image",
   icon: "image",
-  summary: "{{alt}} {{src}}",
   fields: [
     {
       name: "src",
@@ -249,75 +370,85 @@ export const imageShortcode = {
       required: true,
     },
     {
-      name: "alt",
-      label: "Alt Text",
-      widget: "string",
-      required: false,
-    },
-    {
-      name: "aspectRatio",
-      label: "Aspect Ratio",
-      widget: "number",
-      value_type: "float",
-      hint: "Width / Height => square = 1; 16:9 = 1.78; 4:3 = 1.33; Extra wide = 4;",
-      required: false,
-    },
-    {
-      name: "width",
-      label: "Width (px)",
-      widget: "number",
-      value_type: "int",
-      required: false,
-      hint: "Leave empty for auto; Useful for image optimization when not full width.",
-    },
-    {
-      name: "advanced",
-      label: "Advanced Attributes",
+      name: "attributes",
+      label: "Attributes",
       widget: "object",
-      required: false,
+      required: true,
       collapsed: true,
+      summary: "{{alt}}",
       fields: [
         {
-          name: "class",
-          label: "Class",
+          name: "alt",
+          label: "Alt Text",
           widget: "string",
           required: false,
         },
         {
-          name: "id",
-          label: "Id",
-          widget: "string",
+          name: "aspectRatio",
+          label: "Aspect Ratio",
+          widget: "number",
+          value_type: "float",
+          hint: "Width / Height => square = 1; 16:9 = 1.78; 4:3 = 1.33; Extra wide = 4;",
           required: false,
         },
         {
-          name: "title",
-          label: "Title",
-          widget: "string",
+          name: "width",
+          label: "Width (px)",
+          widget: "number",
+          value_type: "int",
           required: false,
+          hint: "Leave empty for auto; Useful for image optimization when not full width.",
         },
         {
-          name: "loading",
-          label: "Loading",
-          widget: "select",
-          options: [
-            { value: "", label: "Default" },
-            { value: "lazy", label: "Lazy" },
-            { value: "eager", label: "Eager" },
+          name: "advanced",
+          label: "Advanced Attributes",
+          widget: "object",
+          required: false,
+          collapsed: true,
+          fields: [
+            {
+              name: "class",
+              label: "Class",
+              widget: "string",
+              required: false,
+            },
+            {
+              name: "id",
+              label: "Id",
+              widget: "string",
+              required: false,
+            },
+            {
+              name: "title",
+              label: "Title",
+              widget: "string",
+              required: false,
+            },
+            {
+              name: "loading",
+              label: "Loading",
+              widget: "select",
+              options: [
+                { value: "", label: "Default" },
+                { value: "lazy", label: "Lazy" },
+                { value: "eager", label: "Eager" },
+              ],
+              required: false,
+            },
+            {
+              name: "wrapper",
+              label: "Wrapper",
+              widget: "string",
+              required: false,
+              hint: "HTML tag to wrap the image in; Leave empty for none;",
+            },
+            {
+              name: "imgAttrs",
+              label: "Other raw image attributes",
+              widget: "string",
+              required: false,
+            },
           ],
-          required: false,
-        },
-        {
-          name: "wrapper",
-          label: "Wrapper",
-          widget: "string",
-          required: false,
-          hint: "HTML tag to wrap the image in; Leave empty for none;",
-        },
-        {
-          name: "imgAttrs",
-          label: "Other raw image attributes",
-          widget: "string",
-          required: false,
         },
       ],
     },
@@ -348,21 +479,24 @@ export const imageShortcode = {
 
     return {
       src,
-      ...(alt && { alt }),
-      ...(aspectRatio && { aspectRatio }),
-      ...(width && { width }),
-      advanced: {
-        ...(className && { class: className }),
-        ...(id && { id }),
-        ...(title && { title }),
-        ...(loading && { loading }),
-        ...(wrapper && { wrapper }),
-        ...(imgAttrs && { imgAttrs }),
+      attributes: {
+        ...(alt && { alt }),
+        ...(aspectRatio && { aspectRatio }),
+        ...(width && { width }),
+        advanced: {
+          ...(className && { class: className }),
+          ...(id && { id }),
+          ...(title && { title }),
+          ...(loading && { loading }),
+          ...(wrapper && { wrapper }),
+          ...(imgAttrs && { imgAttrs }),
+        },
       },
     };
   },
   toBlock: function (data) {
-    const { src, alt, aspectRatio, width, advanced } = data;
+    const { src, attributes } = data;
+    const { alt, aspectRatio, width, advanced } = attributes || {};
     const {
       class: className,
       id,
@@ -1499,81 +1633,224 @@ export const link = {
   toPreview: (data) => `<span>LINK</span>`,
 };
 
-export const gridFluid = {
-  id: "gridfluid",
-  label: "Grid Fluid",
-  icon: "brick",
+export const sectionGrid = {
+  id: "sectionGrid",
+  label: "Grid Section",
+  icon: "grid_view",
   fields: [
     {
-      name: "blocks",
-      label: "Blocks",
-      widget: "list",
-      required: true,
-      default: [{ block: "" }],
+      name: "header",
+      label: "Section Header",
+      widget: "object",
+      required: false,
+      summary: "{{content | truncate(50)}}",
+      collapsed: true,
       fields: [
         {
-          name: "block",
-          label: "Block ",
+          name: "content",
+          label: "Header Content",
           widget: "markdown",
           required: false,
-          summary: "{{value | truncate(50)}}",
+        },
+      ],
+    },
+    {
+      name: "items",
+      label: "Grid Items",
+      widget: "list",
+      required: true,
+      default: [{ item: "" }, { item: "" }, { item: "" }],
+      summary: "{{item | truncate(50)}}",
+      collapsed: true,
+      fields: [
+        {
+          name: "item",
+          label: "Grid Item",
+          widget: "markdown",
+          required: false,
+        },
+      ],
+    },
+    {
+      name: "footer",
+      label: "Section Footer",
+      widget: "object",
+      required: false,
+      summary: "{{content | truncate(50)}}",
+      collapsed: true,
+      fields: [
+        {
+          name: "content",
+          label: "Footer Content",
+          widget: "markdown",
+          required: false,
         },
       ],
     },
     {
       name: "options",
-      label: "Options",
+      label: "Layout and Options",
+      hint: "Manually select a layout and related options",
+      comment:
+        "Elements in a 'Fluid Grid' will wrap automatically one by one when there is not enough space while the 'Switcher' layout switches between horizontal and vertical layout at once at a specified width.",
       widget: "object",
-      required: true,
-      fields: [
+      required: false,
+      collapsed: true,
+      types: [
         {
-          name: "gap",
-          label: "Gap between blocks",
-          widget: "string",
+          name: "grid-fluid",
+          // label: "Fluid Grid: Fluid sized blocks wrap automatically",
+          label: "Fluid Grid",
+          widget: "object",
           required: false,
+          fields: [
+            {
+              name: "columns",
+              label: "Columns",
+              widget: "number",
+              hint: "The number of columns on large screens [note: can be overwritten with a custom variable widthColumnMin defining a min column size in CSS units]",
+              required: false,
+            },
+            {
+              name: "gap",
+              label: "Gap",
+              widget: "string",
+              hint: "The gap between blocks (e.g. 1em [default], var(--step-2) [fluid type scale], 0 [no gap])",
+              required: false,
+            },
+            {
+              name: "class",
+              label: "Class Names",
+              widget: "string",
+              hint: "Additional class names to add to the section (e.g. 'my-class another-class')",
+              required: false,
+            },
+          ],
         },
         {
-          name: "columns",
-          label: "Columns number",
-          widget: "string",
+          name: "switcher",
+          // label: "Switcher: Switch from side by side to vertical display",
+          label: "Switcher",
+          widget: "object",
           required: false,
-        },
-        {
-          name: "minColumnWidth",
-          label: "Min column width",
-          widget: "string",
-          required: false,
-        },
-        {
-          name: "maxColumnWidth",
-          label: "Max column width",
-          widget: "string",
-          required: false,
-        },
-        {
-          name: "class",
-          label: "Class names",
-          widget: "string",
-          required: false,
+          hint: "Switch between side by side and vertical display based on section width",
+          fields: [
+            {
+              name: "widthWrap",
+              label: "Width Wrap",
+              widget: "string",
+              hint: "Section width to switch from side by side to vertical display. (e.g. var(--width-prose) [default], 30rem, 800px, 0px [no wrap])",
+              required: false,
+            },
+            {
+              name: "gap",
+              label: "Gap",
+              widget: "string",
+              hint: "The gap between blocks (e.g. 1em [default], var(--step-2) [fluid type scale], 0 [no gap])",
+              required: false,
+            },
+            {
+              name: "class",
+              label: "Class Names",
+              widget: "string",
+              hint: "Additional class names to add to the section (e.g. 'my-class another-class')",
+              required: false,
+            },
+          ],
         },
       ],
     },
   ],
-  // TODO: envelopper dans un wrapper (voir ligne 580) pour pouvoir ajouter des classes et autres attributs, et éviter d'avoir une syntaxe trop compliquée à gérer dans le markdown lui même
-  pattern: /{% gridfluid\s+(.*?)\s*%}/,
+  // Suggested mod by Claude because...
+  // The ^ and $ anchors combined with the m (multiline) flag cause problems when there are multiple sectionGrid components - the pattern can match incorrectly across component boundaries.
+  // pattern:
+  //   /{%\s*sectionGrid\s*([^%]*?)\s*%}([\s\S]*?){%\s*endsectionGrid\s*%}/g,
+  pattern:
+    /^{%\s*sectionGrid\s*([^>]*?)\s*%}\s*([\S\s]*?)\s*{%\s*endsectionGrid\s*%}$/gm,
   fromBlock: function (match) {
+    const sectionInner = match[2];
+
+    const header = extractWithNunjucksTag(sectionInner, "sectionHeader");
+    const footer = extractWithNunjucksTag(sectionInner, "sectionFooter");
+    const grid = extractWithNunjucksTag(sectionInner, "grid");
+    const { extracted: gridAttributes } = extractAttributes(grid.attributes, [
+      "type",
+      "columns",
+      "gap",
+      "class",
+      "widthWrap",
+    ]);
+
+    // Extract all gridItems with their attributes
+    const gridItems = extractAllWithNunjucksTag(
+      grid?.content || "",
+      "gridItem",
+    );
+
+    // If gridItems have attributes, parse them:
+    // gridItems.forEach(item => {
+    //   const columns = extractAttributeValue(item.attributes, 'columns');
+    // });
+
     return {
-      columns: match?.groups?.columns,
-      gap: match?.groups?.gap,
-      widthColumnMin: match?.groups?.widthColumnMin,
-      widthColumnMax: match?.groups?.widthColumnMax,
-      blocks: match?.groups?.blocks,
+      header: header ? { content: header.content } : undefined,
+      footer: footer ? { content: footer.content } : undefined,
+      items: gridItems.map((item) => ({ item: item.content })),
+      options: gridAttributes,
     };
   },
   toBlock: function (data) {
-    return `{% gridfluid columns="${data?.columns}" gap="${data?.gap}" widthColumnMin="${data?.widthColumnMin}" widthColumnMax="${data?.widthColumnMax}" blocks="${data?.blocks}" %}`;
+    const {
+      type,
+      columns,
+      gap,
+      class: className,
+      widthWrap,
+    } = data?.options || {};
+
+    const headerContent = data?.header?.content
+      ? `{% sectionHeader %}
+${data?.header?.content}
+{% endsectionHeader %}`
+      : "";
+
+    const footerContent = data?.footer?.content
+      ? `{% sectionFooter %}
+${data?.footer?.content}
+{% endsectionFooter %}`
+      : "";
+
+    const gridItemsStr = data?.items?.length
+      ? data.items
+          .map(({ item }, index) => {
+            return item
+              ? `{% gridItem %}
+${item}
+{% endgridItem %}`
+              : "";
+          })
+          .filter(Boolean)
+          .join("\n")
+      : "";
+
+    const gridAttrs = { type, columns, gap, class: className, widthWrap };
+    const gridAttrsStr = Object.entries(gridAttrs)
+      .filter(([key, value]) => !!value)
+      .map(([key, value]) => `${key}="${value}"`)
+      .join(", ");
+    const gridContent = data?.items?.length
+      ? `{% grid ${gridAttrsStr} %}
+${gridItemsStr}
+{% endgrid %}`
+      : "";
+
+    return `{% sectionGrid %}
+${headerContent}
+${gridContent}
+${footerContent}
+{% endsectionGrid %}`;
   },
-  toPreview: (data) => `<span>GRID FLUID</span>`,
+  toPreview: (data) => `<span>GRID SECTION</span>`,
 };
 
 // Example for project specific component def
