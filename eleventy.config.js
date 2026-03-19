@@ -32,6 +32,7 @@ import autoCollections from "./src/config-11ty/plugins/auto-collections/index.js
 import htmlClassesTransform from "./src/config-11ty/plugins/html-classes-transform/index.js";
 import populateInputDir from "./src/config-11ty/plugins/populateInputDir/index.js";
 import partialsPlugin from "./src/config-11ty/plugins/partials/index.js";
+import partialShortcodesPlugin from "./src/config-11ty/plugins/partialShortcodes/index.js";
 import buildExternalCSS from "./src/config-11ty/plugins/buildExternalCSS/index.js";
 import ctxCss from "./src/config-11ty/plugins/ctxCss/index.js";
 import pluginUnoCSS from "./src/config-11ty/plugins/plugin-eleventy-unocss/index.js";
@@ -63,6 +64,7 @@ import {
   BASE_URL,
   PROD_URL,
   WEBSITE_PATH_PREFIX,
+  POKO_THEME,
   statusesToUnrender,
   allLanguages,
   languages,
@@ -73,7 +75,9 @@ import {
   inlineAllStyles,
   brandStyles,
   fontPreloadTags,
+  userCmsConfig,
 } from "./env.config.js";
+import { getSelectedCollections } from "./src/config-11ty/plugins/cms-config/index.js";
 import eleventyComputed from "./src/data/eleventyComputed.js";
 
 // Eleventy Config
@@ -224,6 +228,9 @@ export default async function (eleventyConfig) {
   eleventyConfig.setWatchThrottleWaitTime(500); // in milliseconds
 
   eleventyConfig.addWatchTarget("./src/config-11ty/**/*", {
+    resetConfig: true,
+  });
+  eleventyConfig.addWatchTarget("./src/styles/**/*.css", {
     resetConfig: true,
   });
   // eleventyConfig.addWatchTarget("./src/**/*");
@@ -591,23 +598,39 @@ export default async function (eleventyConfig) {
       "node_modules/@sveltia/cms/dist/sveltia-cms.mjs":
         "assets/js/sveltia-cms.mjs",
     });
-  } else if (CMS_IMPORT !== "cdn") {
+  } else if (CMS_IMPORT.startsWith("../../")) {
     eleventyConfig.addPassthroughCopy({
       [CMS_IMPORT + "sveltia-cms.js"]: "assets/js/sveltia-cms.js",
       [CMS_IMPORT + "sveltia-cms.mjs"]: "assets/js/sveltia-cms.mjs",
+    });
+  } else if (CMS_IMPORT === "local") {
+    eleventyConfig.addPassthroughCopy({
+      "assets/js/sveltia-cms.js": "assets/js/sveltia-cms.js",
+      "assets/js/sveltia-cms.mjs": "assets/js/sveltia-cms.mjs",
     });
   }
 
   eleventyConfig.addTemplate(
     "env.11ty.js",
-    function (data) {
-      const collections = data?.globalSettings?.collections;
-      const icons = {};
+    async function (data) {
+      const userCmsConfigImport = await userCmsConfig();
+      const allSelectedCollections = getSelectedCollections();
+      const allCollections = [
+        ...allSelectedCollections,
+        ...(userCmsConfigImport?.collections || []),
+      ];
+      const allCollectionNames = allCollections?.collections?.map(
+        ({ name }) => name,
+      );
 
-      return `export const env = ${JSON.stringify({
-        collections,
-        iconLists,
-      })};`;
+      const envVars = { CONTENT_DIR };
+
+      return `
+export const env = ${JSON.stringify(envVars)};
+export const allCollections = ${JSON.stringify(allCollections)};
+export const allCollectionNames = ${JSON.stringify(allCollectionNames)};
+export const iconLists = ${JSON.stringify(iconLists)};
+`;
     },
     {
       permalink: "/admin/env.js",
@@ -621,16 +644,16 @@ export default async function (eleventyConfig) {
     // logLevel: 'debug',
     sources: [
       // TODO: Make this selectable from the CMS
-      "src/themes/default",
+      `src/themes/${POKO_THEME}`,
       "src/content",
     ],
   });
   // Partials expand on the renderFile shortcode
   await eleventyConfig.addPlugin(partialsPlugin, {
-    defaultExt: ["njk", "md"],
+    defaultExt: ["11ty.js", "njk", "md"],
     dirs: [
       path.join(WORKING_DIR, PARTIALS_DIR),
-      path.join("src/themes/default/_partials"),
+      path.join(`src/themes/${POKO_THEME}/_partials`),
       path.join("src/content/_partials"),
     ],
     shortcodeAliases: [
@@ -645,6 +668,8 @@ export default async function (eleventyConfig) {
       "componentWrapper",
     ],
   });
+  await eleventyConfig.addPlugin(partialShortcodesPlugin);
+
   // Copy files (Keystatic)
   // Retrieve public files from the _files directory
   // eleventyConfig.addPlugin(keystaticPassthroughFiles)
@@ -733,6 +758,7 @@ export default async function (eleventyConfig) {
 
   // Deferred Config
   await eleventyConfig.addPlugin(customRenderersPlugin);
+  await eleventyConfig.addPlugin(partialShortcodesPlugin);
 
   await eleventyConfig.addPlugin(async function (eleventyConf) {
     eleventyConf.versionCheck(">=3.0.0-alpha.1");

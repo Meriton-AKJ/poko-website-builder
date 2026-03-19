@@ -3,10 +3,10 @@ import fglob from "fast-glob";
 // import deepmerge from "deepmerge";
 import { DEBUG } from "../../../../env.config.js";
 // import { createKeyFromData } from "../../../utils/hash.js";
-import hashSum from "hash-sum";
-import { cleanupExpensiveData } from "../../../utils/eleventyData.js";
+// import hashSum from "hash-sum";
+// import { cleanupExpensiveData } from "../../../utils/eleventyData.js";
 
-let cachedPartials = new Map();
+// let cachedPartials = new Map();
 
 function cleanOutput(str) {
   // Removes leading whitespace from each line and multiples line breaks become a single line break
@@ -67,23 +67,23 @@ export default async function (eleventyConfig, pluginOptions) {
     // const data = deepmerge(this.ctx, dataManual);
     const data = { ...this.ctx, ...dataManual };
     const filename = path.join(filenameRaw);
-    const cacheKey = hashSum({
-      filename,
-      data: cleanupExpensiveData(data),
-      // data: { page: data.page, data: data.data, ...dataManual },
-      templateEngineOverride,
-    });
+    // const cacheKey = hashSum({
+    //   filename,
+    //   data: cleanupExpensiveData(data),
+    //   // data: { page: data.page, data: data.data, ...dataManual },
+    //   templateEngineOverride,
+    // });
     const shouldKeepMdFormating =
       /\.md$/.test(filename) || /md/.test(templateEngineOverride);
 
     // Skip processing and grab from the memoized cache
     // TODO: Not very useful because depends on data as well so a partial on different pages will generate a different cache key.
     // This is intended so not sure we can optimize things that much here...
-    if (cachedPartials.has(cacheKey)) {
-      // TODO: Put this console.info under debug flag when it is tested
-      console.info(`Partial ${filename} found in cache`);
-      return cachedPartials.get(cacheKey);
-    }
+    // if (cachedPartials.has(cacheKey)) {
+    //   // TODO: Put this console.info under debug flag when it is tested
+    //   console.info(`Partial ${filename} found in cache`);
+    //   return cachedPartials.get(cacheKey);
+    // }
 
     const file = await retrievePartial(filename);
 
@@ -99,7 +99,7 @@ export default async function (eleventyConfig, pluginOptions) {
             ? result
             : cleanOutput(result);
 
-          cachedPartials.set(cacheKey, cleanResult);
+          // cachedPartials.set(cacheKey, cleanResult);
           return cleanResult;
         });
     }
@@ -107,7 +107,7 @@ export default async function (eleventyConfig, pluginOptions) {
     return "";
   }
 
-  async function renderePairedPartial(
+  async function renderPairedPartial(
     content,
     filenameRaw,
     dataManual,
@@ -159,6 +159,6 @@ export default async function (eleventyConfig, pluginOptions) {
       console.warn(`Invalid shortcode alias: ${alias}`);
       continue;
     }
-    await eleventyConfig.addPairedAsyncShortcode(alias, renderePairedPartial);
+    await eleventyConfig.addPairedAsyncShortcode(alias, renderPairedPartial);
   }
 }
