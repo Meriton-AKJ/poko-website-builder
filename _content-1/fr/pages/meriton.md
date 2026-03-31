@@ -27,11 +27,28 @@ span.skill {
     color: var(--meriton-green);
 }
 
+.btn-projet {
+    color: #fff;
+    background-color: #000;
+    border-color: #000;
+}
+
+.btn-projet:hover {
+    color: #000;
+    background-color: var(--meriton-green-bright);
+    border-color: var(--meriton-green-bright);
+}
+
 .btn-contact {
-    --color-text__button: var(--black);
-    --color-bg__button: var(--white);
-    --color-text__button--hover: var(--black);
-    --color-bg__button--hover: var(--meriton-green-bright);
+    color: #000;
+    background-color: #fff;
+    border-color: #000;
+}
+
+.btn-contact:hover {
+    color: #000;
+    background-color: var(--meriton-green-bright);
+    border-color: var(--meriton-green-bright);
 }
 
 .cards-clickable {
