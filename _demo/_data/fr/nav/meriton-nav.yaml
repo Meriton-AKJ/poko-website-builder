@@ -1,0 +1,26 @@
+- items:
+    - linkTo:
+        type: pages
+        slug: meriton
+        label: Accueil
+        subItems: []
+    - linkTo:
+        type: pages
+        slug: meriton-projet
+        label: Projets
+        subItems: []
+    - linkTo:
+        type: pages
+        slug: meriton-competence
+        label: Compétences
+        subItems: []
+    - linkTo:
+        type: pages
+        slug: meriton-contact
+        label: Plus d'infos
+        subItems: []
+    - linkTo:
+        type: pages
+        slug: meriton-contact
+        label: Me contacter
+        subItems: []
