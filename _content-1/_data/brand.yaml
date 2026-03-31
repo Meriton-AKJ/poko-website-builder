@@ -202,11 +202,7 @@ palettes:
     heading:
       text__heading: meriton-green
     a: null
-    button:
-      text__button: white
-      bg__button: black
-      text__button--hover: black
-      bg__button--hover: meriton-green-bright
+    button: null
     code: null
     svg: null
     scrollbar: null
