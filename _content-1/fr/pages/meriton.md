@@ -19,6 +19,10 @@ dataList: []
 ---
 
 {% css %}
+.palette-accueil-meriton h1 {
+    --color-text__heading: var(--color-text);
+}
+
 span.skill {
     color: var(--meriton-green);
 }
