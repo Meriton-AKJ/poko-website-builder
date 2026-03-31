@@ -27,28 +27,11 @@ span.skill {
     color: var(--meriton-green);
 }
 
-.btn-projet {
-    color: #fff;
-    background-color: #000;
-    border-color: #000;
-}
-
-.btn-projet:hover {
-    color: #000;
-    background-color: var(--meriton-green-bright);
-    border-color: var(--meriton-green-bright);
-}
-
 .btn-contact {
-    color: #000;
-    background-color: #fff;
-    border-color: #000;
-}
-
-.btn-contact:hover {
-    color: #000;
-    background-color: var(--meriton-green-bright);
-    border-color: var(--meriton-green-bright);
+    --color-text__button: var(--black);
+    --color-bg__button: var(--white);
+    --color-text__button--hover: var(--black);
+    --color-bg__button--hover: var(--meriton-green-bright);
 }
 
 .cards-clickable {
@@ -76,21 +59,21 @@ Bonjour, je suis Meriton Askaj, développeur web junior passionné, je crée des
 Projets réalisés en formation, d'apprentissage, et conceptuels
 {% endsectionHeader %}
 {% grid type="grid-fluid", columns="3", class="center text" %}
-{% gridItem class="cards-clickable" %}
+{% gridItem %}
 {% image src="/_images/pexels-mathilde-langevin-12032340.webp", alt="Photo d'un site e-commerce fleuriste", width="700", aspectRatio="1" %}
 
 ### Site e-commerce fleuriste
 
 Plateforme e-commerce de vente de fleurs simple pour une personnalisation de bouquet entier, avec catalogue produits dynamique et base de données.
 {% endgridItem %}
-{% gridItem class="cards-clickable" %}
+{% gridItem %}
 {% image src="/_images/pexels-andrea-devillier-32709984.webp", alt="Photo d'une landing page de chaussures", width="700", aspectRatio="1" %}
 
 ### Landing page de chaussures
 
 Page de destination moderne et responsive pour la vente de chaussures, avec un design épuré et attrayant.
 {% endgridItem %}
-{% gridItem class="cards-clickable" %}
+{% gridItem %}
 {% image src="/_images/pexels-andrea-devillier-32709984.webp", alt="Photo d'une to do list", width="700", aspectRatio="1" %}
 
 ### To Do List
@@ -100,9 +83,11 @@ Une To Do List simple avec un visuel moderne pour créer de nouvelles tâches, c
 {% endgrid %}
 
 {% endsectionGrid %}
+
 {% wrapper tag="div", class="center text" %}
 {% link url="meriton-projet", text="Voir tous mes projets", linkType="internal", collection="pages", class="button btn-projet" %}
 {% endwrapper %}
+
 <hr>
 
 {% sectionTwoColumns %}
@@ -127,8 +112,7 @@ Un stage non-rémunéré, d'une durée de 250 heures, en parallèle des cours du
 
 {% wrapper tag="div" %}
 ::: switcher {.v--width-wrap:1px .v--grow-switcher:0}
-{% link url="#", text="Télécharger mon CV en Français", linkType="external" %}
-{% link url="#", text="Télécharger mon CV en Anglais", linkType="external" %}
+{% link url="/_images/cv-meriton_askaj.pdf", text="Télécharger mon CV en Français", linkType="file" %}{% link url="/_images/cv-meriton_askaj_en.pdf", text="Télécharger mon CV en Anglais", linkType="file" %}
 :::
 {% endwrapper %}
 
