@@ -19,38 +19,25 @@ dataList: []
 ---
 
 {% css %}
-.text-center h2{
-    color: rgba(61, 165, 49, 0.796);
+span.skill {
+    color: var(--meriton-green);
 }
 
-.text-center h2, span.skill{
-    color: rgba(61, 165, 49, 0.796);
+.btn-contact {
+    --color-text__button: var(--black);
+    --color-bg__button: var(--white);
+    --color-text__button--hover: var(--black);
+    --color-bg__button--hover: var(--meriton-green-bright);
 }
 
-.btn-projet{
-    --color-text__button: #fff;
-    --color-bg__button: #000;
-
-    --color-text__button--hover: #000;
-    --color-bg__button--hover: #20e20b;
-}
-
-.btn-contact{
-    --color-text__button: #000;
-    --color-bg__button: #fff;
-
-    --color-text__button--hover: #000;
-    --color-bg__button--hover: #20e20b;
-}
-
-.cards-clickable{
-  --shadow-breakout-clickable: 0 0 0 rgba(0,0,0,0);
-  --shadow-breakout-clickable-hover: 0 10px 30px rgba(32,226,11,.35);
-  --transform-breakout-clickable-hover: translateY(-2px);
+.cards-clickable {
+    --shadow-breakout-clickable: 0 0 0 rgba(0,0,0,0);
+    --shadow-breakout-clickable-hover: 0 10px 30px rgba(32,226,11,.35);
+    --transform-breakout-clickable-hover: translateY(-2px);
 }
 {% endcss %}
 
-{% wrapper tag="div", class="text-center" %}
+{% wrapper tag="div", class="text-center palette-accueil-meriton" %}
 # Meriton Askaj - Développeur web junior en formation
 
 ## - A la recherche d'un stage en alternance -

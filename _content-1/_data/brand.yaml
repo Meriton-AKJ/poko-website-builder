@@ -24,6 +24,10 @@ colors:
     value: "#000001"
   - name: white
     value: "#ffffff"
+  - name: meriton-green
+    value: "rgba(61, 165, 49, 0.796)"
+  - name: meriton-green-bright
+    value: "#20e20b"
   - name: theme1-v1-light-typo #typo and button
     value: "#544A40"
   - name: theme1-v1-light-alt #section bg, footer, form
@@ -178,6 +182,31 @@ palettes:
     heading: null
     a: null
     button: null
+    code: null
+    svg: null
+    scrollbar: null
+    advanced: null
+  - name: accueil-meriton
+    text: black
+    bg: white
+    accent: ""
+    border: ""
+    text-decoration: ""
+    text--marker: ""
+    advancedDefaults: null
+    selection: null
+    strong: null
+    em: null
+    mark: null
+    b: null
+    heading:
+      text__heading: meriton-green
+    a: null
+    button:
+      text__button: white
+      bg__button: black
+      text__button--hover: black
+      bg__button--hover: meriton-green-bright
     code: null
     svg: null
     scrollbar: null
