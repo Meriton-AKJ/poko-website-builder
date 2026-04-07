@@ -18,7 +18,7 @@ vars: null
 dataList: []
 ---
 
-{% css %}
+{% icon "undefined:undefined" %}{% icon "tablerOutline:device-desktop-code" %}{% css %}
 .palette-accueil-meriton h1 {
     --color-text__heading: var(--color-text);
 }
