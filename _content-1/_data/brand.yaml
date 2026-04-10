@@ -28,6 +28,12 @@ colors:
     value: "rgba(61, 165, 49, 0.796)"
   - name: meriton-green-bright
     value: "#20e20b"
+  - name: meriton-red-bright
+    value: "#e2200b"
+  - name: meriton-purple
+    value: "#a855f7"
+  - name: meriton-gold
+    value: "#c9a227"
   - name: theme1-v1-light-typo #typo and button
     value: "#544A40"
   - name: theme1-v1-light-alt #section bg, footer, form
